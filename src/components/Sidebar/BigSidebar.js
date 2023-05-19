@@ -1,3 +1,4 @@
+import React, {useEffect} from 'react';
 import { useSelector} from 'react-redux';
 import { SidebarItem } from './SidebarTabs';
 import styled from 'styled-components';
@@ -13,7 +14,12 @@ const BigSidebar = () => {
   const { isSidebarOpen } = useSelector((store) => store.user);
   const {data } = useSession();
 
+  const [count, setCount] = React.useState(0);
+  useEffect(() => {
+      setCount((prev) => prev + 1)
+  }, [] )
 
+  console.log('BigSidebar effect run ' + count + ' times')
   const onClick = () => {
     setOpen(true)
   }

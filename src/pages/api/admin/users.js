@@ -3,32 +3,38 @@ import User from '../../../../server/models/contactInfoModel';
 import connectMongo from '../../../../server/config';
 
 export default async function handler(req, res) {
-   
+
+    
+ 
+
     let action = req.body.action
-    console.log('action: ' + JSON.stringify(action))
+    console.log( '\n action: ' + JSON.stringify(action) + '\n')
+
     //iNSERT NEW USER
     if(action === 'add') {
+      console.log(req.body)
         try {
-            console.log(req.body)
-            
+           
+
             await connectMongo();
             let password = req.body.password;
             const salt = await bcrypt.genSalt(10);
             const hashPassword = await bcrypt.hash(password, salt);
-
             console.log('hassPassword' + JSON.stringify(hashPassword ))
+
+
             const user = await User.create({password: hashPassword, email: req.body.email, firstName: req.body.firstName, lastName: req.body.lastName, role: req.body.role })
-            console.log('user: ' + JSON.stringify(user)) 
-            if(user) {
-                res.status(200).json({success: true, user: user});
+            let fake = false;
+            if(user && fake === true) {
+              return  res.status(200).json({success: true, user: user});
             } 
             else {
-            res.status(200).json({success: false, user: null});
+              return res.status(200).json({success: false, user: null});
             }
         
             
         } catch (error) {
-            res.status(400).json({ success: false, error: 'failed to fetch user' });
+          return res.status(400).json({ success: false, error: 'failed to fetch user' });
         }
     }
 
@@ -88,3 +94,10 @@ export default async function handler(req, res) {
 }
 
 
+const addUserValidation = (req) => {
+  console.log('are we here')
+  if(req.body.password === '') {
+    console.log('are we here `100')
+    return  res.status(200).json({success: false, user: null, error: 'Missing parameters'});
+  }
+}

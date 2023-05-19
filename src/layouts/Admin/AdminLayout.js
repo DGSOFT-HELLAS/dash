@@ -5,10 +5,19 @@ import styled from 'styled-components';
 
 import AdminNavbar from '@/components/AdminNavbar';
 import BigSidebar from '@/components/Sidebar/BigSidebar';
+import { useEffect } from 'react';
 
 
 const AdminLayout = ({children}) => {
     const { isSidebarOpen } = useSelector((store) => store.user)
+    const [count, setCount] = React.useState(0);
+    useEffect(() => {
+      
+        setCount((prev) => prev + 1)
+       
+    }, [] )
+
+    console.log('AdminLayout effect run ' + count + ' times')
     return (
             <Container>
                 <AdminNavbar />
@@ -18,6 +27,8 @@ const AdminLayout = ({children}) => {
                         {children}
                     </SidebarContainer>
                 </div>
+              
+
             </Container>
     )
 }
